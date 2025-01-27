@@ -22,13 +22,12 @@ class Weather {
 class WeatherService {
   private baseURL: string;
   private apiKey: string;
-  private cityName: string;
 
   constructor() {
     this.baseURL = process.env.API_BASE_URL || '';
     this.apiKey = process.env.API_KEY || '';
-    this.cityName = '';
   }
+
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string) {
     const geocodeUrl = this.buildGeocodeQuery(query);

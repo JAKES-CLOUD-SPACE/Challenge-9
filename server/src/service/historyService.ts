@@ -20,17 +20,14 @@ class HistoryService {
   }
   // TODO: Define a read method that reads from the searchHistory.json file
   // private async read() {}
-  private async read(): Promise<City[]> {
+  private async read() {
     try {
-      const data = await fs.promises.readFile(this.filePath, 'utf-8');
+      const data = await fs.readFile(this.filePath, 'utf-8');
       const cities = JSON.parse(data);
       return cities.map((city: any) => new City(city.id, city.name)); // Convert plain objects to City instances
     } catch (error) {
-      if (error.code === 'ENOENT') {
-        // If the file doesn't exist, return an empty array
-        return [];
-      }
-      throw error;
+      console.error('Error reading search history:', error);
+      return [];
     }
   }
 
@@ -38,7 +35,7 @@ class HistoryService {
   // private async write(cities: City[]) {}
   private async write(cities: City[]): Promise<void> {
     const jsonData = JSON.stringify(cities, null, 2); // Pretty print the JSON
-    await fs.promises.writeFile(this.filePath, jsonData, 'utf-8');
+    await fs.writeFile(this.filePath, jsonData, 'utf-8');
   }
 
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
@@ -59,7 +56,7 @@ class HistoryService {
   // async removeCity(id: string) {}
   async removeCity(id: string): Promise<void> {
     const cities = await this.read();
-    const index = cities.findIndex(city => city.id === id);
+    const index = cities.findIndex((city: City) => city.id === id);
     if (index === -1) {
       throw new Error('City not found');
     }
